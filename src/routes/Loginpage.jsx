@@ -9,6 +9,7 @@ export default function LoginPage() {
         username: '',
         email: '',
         password: '',
+        confirm_password: '',
     })
     const [errors, setErrors] = useState([])
     const {setUser} = useOutletContext();
@@ -23,18 +24,26 @@ export default function LoginPage() {
           ...prevData,
           [name]: value,
         }));
+        setErrors((prevErrors) => prevErrors.filter(error => error.path !== name))
       };
 
     async function handleSubmit(e) {
         e.preventDefault();
 
+        console.log(formData)
+
         try {
             const response = await fetch(`${baseURL}/signup`, {
                 method: 'POST',
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json'
+                  }
         });
 
         const result = await response.json();
+
+        console.log(result)
 
         if (response.status === 201) {
             const result = response.json();
@@ -78,7 +87,8 @@ export default function LoginPage() {
                 <input id='password' name='password' type='password' onChange={handleChange}></input>
                 {getErrorsForField('password')}
                 <label htmlFor='confirm_password'>Confirm password:</label>
-                <input id='confirm_password' name='confirm_password' type='password'></input>
+                <input id='confirm_password' name='confirm_password' type='password' onChange={handleChange}></input>
+                {getErrorsForField('confirm_password')}
                 <input type='submit' value='Sign Up'></input>
             </form>
         </main>
