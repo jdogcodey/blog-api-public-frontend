@@ -1,5 +1,5 @@
-import { useState, useNavigate } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useState } from "react";
+import { useOutletContext, useNavigate } from "react-router-dom";
 
 
 export default function LoginPage() {
@@ -10,7 +10,7 @@ export default function LoginPage() {
         email: '',
         password: '',
     })
-    const [errors, setErrors] = useState({})
+    const [errors, setErrors] = useState([])
     const {setUser} = useOutletContext();
 
     let navigate = useNavigate();
@@ -28,8 +28,6 @@ export default function LoginPage() {
     async function handleSubmit(e) {
         e.preventDefault();
 
-        
-
         try {
             const response = await fetch(`${baseURL}/signup`, {
                 method: 'POST',
@@ -38,42 +36,47 @@ export default function LoginPage() {
 
         const result = await response.json();
 
-        if (!response.ok) {
-            throw result;
-        }
-
         if (response.status === 201) {
             const result = response.json();
             const {token, user} = result.data;
             localStorage.setItem('token', token)
             setUser(user);
             navigate(`/user`)
+        } else {
+            throw result;
         }
         } catch (err) {
-            const errors = err.errors || {};
-            setErrors(errors);
+            const errorsArray = err.errors || {};
+            console.log(errorsArray)
+            setErrors(errorsArray);
         };
 
         
+    }
+
+    function getErrorsForField(fieldName) {
+        return errors
+        .filter(error => error.path === fieldName)
+        .map((error) => (<p>{error.msg}</p>))
     }
     return (
         <main>
             <form onSubmit={handleSubmit}>
                 <label htmlFor='first_name'>First Name:</label>
                 <input id='first_name' name='first_name' type='text' placeholder='e.g. John' onChange={handleChange}></input>
-                {errors.first_name && <p>{errors.first_name}</p>}
+                {getErrorsForField('first_name')}
                 <label htmlFor='last_name'>Last Name:</label>
                 <input id='last_name' name='last_name' type='text' placeholder='e.g. Smith' onChange={handleChange}></input>
-                {errors.last_name && <p>{errors.last_name}</p>}
+                {getErrorsForField('last_name')}
                 <label htmlFor='username'>Username:</label>
                 <input id='username' name='username' type='text' placeholder='e.g. JohnSmith123' onChange={handleChange}></input>
-                {errors.username && <p>{errors.username}</p>}
+                {getErrorsForField('username')}
                 <label htmlFor='email'>Email:</label>
                 <input id='email' name='email' type='email' placeholder='e.g. johnsmith@email.com' onChange={handleChange}></input>
-                {errors.email && <p>{errors.email}</p>}
+                {getErrorsForField('email')}
                 <label htmlFor='password'>Password:</label>
                 <input id='password' name='password' type='password' onChange={handleChange}></input>
-                {errors.password && <p>{errors.password}</p>}
+                {getErrorsForField('password')}
                 <label htmlFor='confirm_password'>Confirm password:</label>
                 <input id='confirm_password' name='confirm_password' type='password'></input>
                 <input type='submit' value='Sign Up'></input>
