@@ -24,7 +24,11 @@ export default function LoginPage() {
           ...prevData,
           [name]: value,
         }));
-        setErrors((prevErrors) => prevErrors.filter(error => error.path !== name))
+        setErrors(prevErrors =>
+            Array.isArray(prevErrors)
+              ? prevErrors.filter(error => error.path !== name)
+              : []
+          );
       };
 
     async function handleSubmit(e) {
@@ -64,10 +68,12 @@ export default function LoginPage() {
     }
 
     function getErrorsForField(fieldName) {
+        if (!Array.isArray(errors)) return null;
+      
         return errors
-        .filter(error => error.path === fieldName)
-        .map((error) => (<p>{error.msg}</p>))
-    }
+          .filter(error => error.path === fieldName)
+          .map((error, index) => <p key={index}>{error.msg}</p>);
+      }
     return (
         <main>
             <form onSubmit={handleSubmit}>
