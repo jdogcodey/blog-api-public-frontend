@@ -1,4 +1,4 @@
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 import { useEffect } from "react";
 
@@ -6,6 +6,11 @@ export default function User() {
   const { user, setUser } = useOutletContext();
   const baseURL = import.meta.env.VITE_API_BASE_URL;
   const token = localStorage.getItem('token');
+  let navigate = useNavigate()
+  useEffect(() => {if (!user && !token) {
+    navigate('/login')
+  }
+})
 
   useEffect(() => {
     if (!user && token) {
