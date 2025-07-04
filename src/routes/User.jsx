@@ -23,7 +23,6 @@ export default function User() {
 
           if (response.ok) {
             setUser(result.data.user);
-            console.log(result.data.user);
           } else {
             console.error("Failed to fetch user:", result.message);
           }
