@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 
 
-export default function LoginPage() {
+export default function SignupPage() {
     const [formData, setFormData] = useState({
         first_name: '',
         last_name: '',
@@ -50,7 +50,8 @@ export default function LoginPage() {
         console.log(result)
 
         if (response.status === 201) {
-            const result = response.json();
+            // Is this line necessary as I'm doing it earlier? Need to test
+            // const result = response.json();
             const {token, user} = result.data;
             localStorage.setItem('token', token)
             setUser(user);
