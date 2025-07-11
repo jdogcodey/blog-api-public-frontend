@@ -31,13 +31,14 @@ export default function User() {
             setUser(result.data.user);
           } else {
             console.error("Failed to fetch user:", result.message);
+            navigate('/login')
           }
         } catch (err) {
           console.log(err);
         }
       })();
     }
-  }, [user, token, baseURL, setUser]);
+  }, [user, token, baseURL, setUser, navigate]);
 
   useEffect(() => {
     if (user) {
@@ -69,6 +70,13 @@ export default function User() {
     <main>
       {user && <h1>{user.first_name + ' ' + user.last_name}</h1>}
       {user && <h2>{user.username}</h2>}
+      {posts && posts.map((post, i) => {
+        return<div key={i}>
+          <h3>{post.title}</h3>
+          <p>{post.content}</p>
+          <p>{post.latest_edit}</p>
+        </div>
+        })}
     </main>
   );
 }
