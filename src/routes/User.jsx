@@ -2,6 +2,8 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 
 import { useEffect, useState } from "react";
 
+import { format } from 'date-fns'
+
 export default function User() {
   const { user, setUser } = useOutletContext();
   const baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -74,7 +76,7 @@ export default function User() {
         return<div key={i}>
           <h3>{post.title}</h3>
           <p>{post.content}</p>
-          <p>{post.latest_edit}</p>
+          <p>{format(new Date(post.latest_edit), 'H:mm dd/MM/yy')}</p>
         </div>
         })}
     </main>
