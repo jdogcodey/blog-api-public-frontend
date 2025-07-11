@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { format } from 'date-fns'
 
-export default function User() {
+export default function Profile() {
   const { user, setUser } = useOutletContext();
   const baseURL = import.meta.env.VITE_API_BASE_URL;
   const token = localStorage.getItem('token');

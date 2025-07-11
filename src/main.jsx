@@ -7,7 +7,7 @@ import ErrorPage from './routes/ErrorPage.jsx';
 import SignupPage from './routes/SignupPage.jsx';
 import Homepage, { loader as homepageLoader } from './routes/Homepage.jsx';
 import LoginPage from './routes/LoginPage.jsx';
-import User from './routes/User.jsx';
+import Profile from './routes/Profile.jsx';
 
 
 const router = createBrowserRouter(createRoutesFromElements(
@@ -15,7 +15,7 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route index element={<Homepage />} loader={homepageLoader} />
     <Route path="/signup" element={<SignupPage />} />
     <Route path='/login' element={<LoginPage />} />
-    <Route path='/user' element={<User />} />
+    <Route path='/profile' element={<Profile />} />
   </Route>
 ))
 
