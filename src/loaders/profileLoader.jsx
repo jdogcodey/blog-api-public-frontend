@@ -4,7 +4,7 @@ export default async function profileLoader() {
 
     if (!token) return { user: null }
     
-    const res = await fetch(`${baseURL}/user`, {
+    const res = await fetch(`${baseURL}/auth/verify`, {
         method: 'GET', 
         headers: {
             'Content-Type': 'application/json',

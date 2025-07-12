@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import { format } from 'date-fns'
 import { useUser } from "../contexts/userContext";
 
+
 export default function User() {
   const baseURL = import.meta.env.VITE_API_BASE_URL;
   const token = localStorage.getItem('token');
   const [posts, setPosts] = useState(null);
+  const [expandedPosts, setExpandedPosts] = useState([]);
   const { user } = useUser();
 
+  useEffect(() => {
+  })
 
   useEffect(() => {
     if (user) {
@@ -33,19 +37,52 @@ export default function User() {
         }
       })()
     }
-  }, [user, baseURL, token])
+  }, [user, baseURL, token]);
+
+  const toggleComments = (index) => {
+    setExpandedPosts(prev => prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index])
+  }
+
 
   return (
     <main>
-      {user && <h1>{user.first_name + ' ' + user.last_name}</h1>}
-      {user && <h2>{user.username}</h2>}
-      {posts && posts.map((post, i) => {
-        return<div key={i}>
-          <h3>{post.title}</h3>
-          <p>{post.content}</p>
-          <p>{format(new Date(post.latest_edit), 'H:mm dd/MM/yy')}</p>
-        </div>
-        })}
+      {user && (
+        <>
+          <h1>{user.first_name + ' ' + user.last_name}</h1>
+          <h2>{user.username}</h2>
+        </>
+      )}
+
+      {Array.isArray(posts) && posts.map((post, index) => {
+        const isExpanded = expandedPosts.includes(index);
+        const commentsToShow = isExpanded
+          ? post.comments
+          : post.comments?.slice(0, 2);
+
+        return (
+          <div key={index}>
+            <h3>{post.title}</h3>
+            <p>{post.content}</p>
+            <p>{format(new Date(post.latest_edit), 'H:mm dd/MM/yy')}</p>
+
+            <h4>Comments</h4>
+            <div id="comment-section">
+              {commentsToShow?.map((comment, i) => (
+                <div key={i}>
+                  <p>{comment.content}</p>
+                  <p>{comment.user.username}</p>
+                </div>
+              ))}
+
+              {post.comments?.length > 2 && (
+                <button onClick={() => toggleComments(index)}>
+                  {isExpanded ? 'Show less' : 'Show more'}
+                </button>
+              )}
+            </div>
+          </div>
+        );
+      })}
     </main>
   );
 }
