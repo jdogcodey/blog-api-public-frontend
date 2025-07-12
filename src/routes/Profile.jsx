@@ -1,46 +1,13 @@
-import { useNavigate, useOutletContext } from "react-router-dom";
-
 import { useEffect, useState } from "react";
-
 import { format } from 'date-fns'
+import { useUser } from "../contexts/userContext";
 
-export default function Profile() {
-  const { user, setUser } = useOutletContext();
+export default function User() {
   const baseURL = import.meta.env.VITE_API_BASE_URL;
   const token = localStorage.getItem('token');
   const [posts, setPosts] = useState(null);
-  let navigate = useNavigate()
-  useEffect(() => {if (!user && !token) {
-    navigate('/login')
-  }
-})
+  const { user } = useUser();
 
-  useEffect(() => {
-    if (!user && token) {
-      (async function getUser() {
-        try {
-          const response = await fetch(`${baseURL}/user`, {
-            method: 'GET',
-            headers: {
-              "Content-Type": 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-          });
-
-          const result = await response.json();
-
-          if (response.ok) {
-            setUser(result.data.user);
-          } else {
-            console.error("Failed to fetch user:", result.message);
-            navigate('/login')
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      })();
-    }
-  }, [user, token, baseURL, setUser, navigate]);
 
   useEffect(() => {
     if (user) {

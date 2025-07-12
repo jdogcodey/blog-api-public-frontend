@@ -1,14 +1,24 @@
 import Header from './Header.jsx';
 import Footer from './Footer.jsx';
-import { Outlet } from 'react-router-dom';
-import { useState } from 'react';
+import { Outlet, useLoaderData } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useUser } from '../contexts/userContext.jsx';
+
+
 
 export default function Root() {
-    const [user, setUser] = useState(null);
+    const { user: user } = useLoaderData();
+    console.log(user)
+    const { setUser } = useUser();
+    useEffect(() => {
+        setUser(user || null)
+        
+    }, [user, setUser])
+
     return (
         <>
         <Header />
-        <Outlet context={{user, setUser}} />
+        <Outlet />
         <Footer />
         </>
     )

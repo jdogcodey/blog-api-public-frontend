@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom'
+import { useUser } from '../contexts/userContext';
 
 export default function LoginPage() {
     const [formData, setFormData] = useState({
@@ -7,7 +8,7 @@ export default function LoginPage() {
         password: ''
     })
     const [errors, setErrors] = useState([])
-    const {setUser} = useOutletContext();
+    const { setUser } = useUser();
 
     let navigate = useNavigate();
 
@@ -44,7 +45,7 @@ export default function LoginPage() {
                 const {token, user} = result.data;
                 localStorage.setItem('token', token)
                 setUser(user);
-                navigate('/user')
+                navigate('/profile')
             } else {
                 throw result;
             }

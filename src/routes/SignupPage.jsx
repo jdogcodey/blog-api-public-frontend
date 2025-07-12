@@ -55,7 +55,7 @@ export default function SignupPage() {
             const {token, user} = result.data;
             localStorage.setItem('token', token)
             setUser(user);
-            navigate(`/user`)
+            navigate(`/profile`)
         } else {
             throw result;
         }
